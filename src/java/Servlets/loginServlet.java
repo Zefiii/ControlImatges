@@ -15,12 +15,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -51,13 +53,27 @@ public class loginServlet extends HttpServlet {
         Connection conn = null;
         try (PrintWriter out = response.getWriter()) {
             conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
-            Statement statement =  conn.createStatement();
-            //statement.setString(1, user);
-            ResultSet rs = statement.executeQuery("select * from usuarios");
-            out.println("<h1>Estem a una d'entrar al while</h1>");
+            PreparedStatement statement =  conn.prepareStatement("select * from usuarios where id_usuario = ?");
+            statement.setString(1, user);
+            ResultSet rs = statement.executeQuery();
             while(rs.next()){
-                if(rs.getString("password").equals(pass)) out.println("<h1>T'has logejat</h1>");  
-                else out.println("<h1>Password incorrecte</h1>");
+                if(rs.getString("password").equals(pass)){
+                    //aixo en principi dona sessions, mes tard intento que
+                    //faci el control. Jo m'encarregare d'aixo de moment
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", rs.getString("id_usuario"));
+                    session.setMaxInactiveInterval(5*60);
+                    Cookie userName = new Cookie("user", rs.getString("id_usuario"));
+                    response.sendRedirect("menu.jsp" );
+                }  
+                else{
+                    //aixo hauria de donar un missatge de error pero no ho fa
+                    RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+                    PrintWriter ou;
+                    ou = response.getWriter();
+                    ou.println("<font color = red> Usuario o contraseya incorrectes.</font>");
+                    rd.forward(request, response);
+                }
             }
             /*Aqui li he de donar la cookie, s'afageix a la resposta i es crea 
             mitjancant Cookie. */
