@@ -21,6 +21,8 @@
         <h1>Registrar imatge</h1>
         <p>Introdueix les dades que es demanen a continuacio</p>
         <form method="post" action="registrarImagenServlet">
+            Imatge:<input type="file" name="file">
+            <br>
             Titol:<input type="text" name="titol">
             <br>
             <textarea>Escriu una breu descripcio...</textarea>
