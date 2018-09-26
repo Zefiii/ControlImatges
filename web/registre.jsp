@@ -15,7 +15,7 @@
         <div>
             <h1>Registre</h1>
             <h2>Introdueix les dades</h2>
-            <form name="regist" method="post" action="registreServlet">
+            <form id="regist" method="post" action="registreServlet">
                 Username:<br>
                 <input type="text" name="user">
                 <br>
@@ -25,7 +25,7 @@
                 Repeat password:<br>
                 <input type="password" name="pass2">
                 <br>
-                <input type="submit" value="submit">
+                <input type="submit" value="Registrar-se">
             </form>
         </div>
     </body>
