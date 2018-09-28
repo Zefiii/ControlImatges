@@ -19,6 +19,8 @@
         <title>Buscar Imatge</title>
     </head>
     <body>
-        <h1>Buscar Imatge</h1>
+        <div>
+            <h1 id="headerBuscar">Buscar Imatge</h1>
+        </div>
     </body>
 </html>

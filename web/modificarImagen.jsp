@@ -18,6 +18,8 @@
         <title>Modificar imatge</title>
     </head>
     <body>
-        <h1>Modificar imatge</h1>
+        <div>
+            <h1 id="headerModificar">Modificar imatge</h1>
+        </div>
     </body>
 </html>

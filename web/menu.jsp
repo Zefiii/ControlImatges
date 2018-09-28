@@ -19,15 +19,15 @@
     </head>
     <body>
         <div>
-            <h1>Menu</h1>
+            <h1 id="headerMenu">Menu</h1>
             <br>
-            <a href="registrarImagen.jsp">Registrar Imatge</a>
+            <a href="registrarImagen.jsp" id="refToRegistre">Registrar Imatge</a>
             <br>
-            <a href="modificarImagen.jsp">Modificar Imatge</a>
+            <a href="modificarImagen.jsp" id="refToModificar">Modificar Imatge</a>
             <br>
-            <a href="list.jsp">Llistar imatges</a>
+            <a href="list.jsp" id="refToLlista">Llistar imatges</a>
             <br>
-            <a href="buscarImagen.jsp">Busar imatge</a>
+            <a href="buscarImagen.jsp" id="refToBuscar">Busar imatge</a>
         </div>
     </body>
 </html>

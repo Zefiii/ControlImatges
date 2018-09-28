@@ -46,9 +46,14 @@ public class initDB extends HttpServlet {
         Connection conn = null;
         try (PrintWriter out = response.getWriter()) {
             conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
+            
             Statement statement = conn.createStatement();
             statement.setQueryTimeout(30);
+            statement.executeUpdate("drop table if exists usuarios");
+            statement.executeUpdate("drop table if exists imagenes");
             statement.executeUpdate("create table usuarios (id_usuario string primary key, password string)");
+            statement.executeUpdate("create table imagenes (id_imagen integer primary key, id_usuario string, titulo string, descripcion string, palabras_clave string, autor string, creacion string)");
+
               // set timeout to 30 sec.
         }
          catch(SQLException e)

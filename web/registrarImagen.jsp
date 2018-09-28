@@ -18,23 +18,27 @@
         <title>Registrar Imatge</title>
     </head>
     <body>
-        <h1>Registrar imatge</h1>
-        <p>Introdueix les dades que es demanen a continuació</p>
-        <form method="post" action="registrarImagen" enctype="multipart/form-data">
-
-            Imatge:<input type="file" name="file" id="file" accept="image/*" />
-            <br/>
-            Títol:<input type="text" name="titol"/>
-            <br/>
-            <textarea cols='30' rows='10'>Escriu una breu descripció...</textarea>
-            <br/>
-            Paraules clau:<input type="text" name="clau"/>
-            <br/>
-            Autor:<input type="text" name="autor"/>
-            <br/>
-            Data de creació:<input type="text" name="creacio"/>
-            <br/>
-            <input type="submit" name="submit"/>
-        </form>
+        <div>
+            <h1 id="headerRegistreImatge">Registrar imatge</h1>
+            <p id="dades"><strong>Introdueix les dades que es demanen a continuació</strong></p>
+            <form method="post" action="registrarImagenServlet" id="registrarImatge">
+                <label for="file"> Imatge:</label>
+                <input type="file" name="file" id="file" accept="image/*">
+                <br>
+                <label for="titol">Títol:</label>
+                <input type="text" name="titol" id="titol">
+                <br>
+                <textarea cols='30' rows='10' name="textArea" id="textArea" placeholder="Escriu una breu descripció..."></textarea>
+                <br>
+                <label for="clau">Paraules clau:</label>
+                <input type="text" name="clau" id="clau">
+                <br>
+                <label for="autor">Autor:</label>
+                <input type="text" name="autor" id="autor">
+                <br>
+                <label for="creacio">Data de creació:</label>
+                <input type="text" name="creacio">
+            </form>
+        </div>
     </body>
 </html>

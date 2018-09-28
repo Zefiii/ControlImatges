@@ -18,6 +18,8 @@
         <title>Llistar imatges</title>
     </head>
     <body>
-        <h1>Llistar imatges</h1>
+        <div>
+            <h1 id="headerLlistar">Llistar imatges</h1>
+        </div>
     </body>
 </html>

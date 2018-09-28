@@ -16,14 +16,12 @@
             <h1>Registre</h1>
             <h2>Introdueix les dades</h2>
             <form id="regist" method="post" action="registreServlet">
-                Username:<br>
-                <input type="text" name="user">
-                <br>
-                Password:<br>
-                <input type="password" name="pass1">
-                <br>
-                Repeat password:<br>
-                <input type="password" name="pass2">
+                <label for="user">Username:<br></label>
+                <input type="text" name="user" id="user">
+                <label for="pass1"><br>Password:<br></label>
+                <input type="password" name="pass1" id="pass1">
+                <label for="pass2"><br>Repeat password:<br></label>
+                <input type="password" name="pass2" id="pass2">
                 <br>
                 <input type="submit" value="Registrar-se">
             </form>
