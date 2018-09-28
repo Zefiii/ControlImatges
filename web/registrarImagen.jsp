@@ -28,7 +28,7 @@
                 <label for="titol">Títol:</label>
                 <input type="text" name="titol" id="titol">
                 <br>
-                <textarea cols='30' rows='10' name="textArea" id="textArea" placeholder="Escriu una breu descripció..."></textarea>
+                <textarea cols='30' rows='10' name="textArea" id="descripcio" placeholder="Escriu una breu descripció..."></textarea>
                 <br>
                 <label for="clau">Paraules clau:</label>
                 <input type="text" name="clau" id="clau">
