@@ -12,16 +12,20 @@
         <title>Login</title>
     </head>
     <body>
-        <h1>Registre d'Imatges</h1>
-        <h2>Introdueix les dades per iniciar sessio</h2>
-        <form method="post" action="loginServlet" name="log">
-            Usuari:<br>
-            <input type="text" name="user">
-            <br>
-            Password: <br>
-            <input type="password" name="pass">
-            <br>
-            <input type="submit" value="submit">
-        </form>
+        <div>
+            <h1>Registre d'Imatges</h1>
+            <h2>Introdueix les dades per iniciar sessió</h2>
+            <form method="post" action="loginServlet" name="log">
+                Usuari:<br>
+                <input type="text" name="user">
+                <br>
+                Password: <br>
+                <input type="password" name="pass">
+                <br>
+                <input type="submit" value="Entrar">
+                <br><br>
+                <a href="register.jsp">Encara no t'has registrat?</a>
+            </form>
+        </div>
     </body>
 </html>

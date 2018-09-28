@@ -12,7 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import site.apidocs.org.apache.fileupload.*;
+import org.apache.commons.fileupload.*;
+import org.apache.commons.io.*;
 
 /**
  *
@@ -20,7 +21,7 @@ import site.apidocs.org.apache.fileupload.*;
  */
 @WebServlet(name = "registrarImagen", urlPatterns = {"/registrarImagen"})
 public class registrarImagen extends HttpServlet {
-
+     private final String UPLOAD_DIRECTORY = "C:/uploads";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

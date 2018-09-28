@@ -18,14 +18,16 @@
         <title>Menu</title>
     </head>
     <body>
-        <h1>Menu</h1>
-        <br>
-        <a href="registrarImagen.jsp">Registrar Imatge</a>
-        <br>
-        <a href="modificarImagen.jsp"> Modificar Imatge</a>
-        <br>
-        <a href="list.jsp"> Llistar imatges</a>
-        <br>
-        <a href="buscarImagen.jsp">Busar imatge</a>
+        <div>
+            <h1>Menu</h1>
+            <br>
+            <a href="registrarImagen.jsp">Registrar Imatge</a>
+            <br>
+            <a href="modificarImagen.jsp">Modificar Imatge</a>
+            <br>
+            <a href="list.jsp">Llistar imatges</a>
+            <br>
+            <a href="buscarImagen.jsp">Busar imatge</a>
+        </div>
     </body>
 </html>
