@@ -5,23 +5,32 @@
  */
 package Servlets;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.*;
-import org.apache.commons.io.*;
+import javax.servlet.http.Part;
+import java.io.OutputStream;
+import java.util.logging.Level;
+import javax.servlet.annotation.MultipartConfig;
+
 
 /**
  *
  * @author oriol
  */
 @WebServlet(name = "registrarImagen", urlPatterns = {"/registrarImagen"})
+@MultipartConfig 
 public class registrarImagen extends HttpServlet {
-     private final String UPLOAD_DIRECTORY = "C:/uploads";
+     private final static Logger LOGGER = Logger.getLogger(registrarImagen.class.getCanonicalName());
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,8 +43,48 @@ public class registrarImagen extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        
+        /* Creem les variables per poder guardar la imatge*/
+        final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
+        final Part filePart = request.getPart("file");
+        final String fileName = request.getParameter("titol");
+        
+        OutputStream ou = null;
+        InputStream filecontent = null;
+        final PrintWriter writer = response.getWriter();
+        
+        
+        try{
+           ou = new FileOutputStream(new File(path + File.separator + fileName));
+           filecontent = filePart.getInputStream();
+           int read = 0;
+           final byte[] bytes = new byte[1024];
            
+           while((read = filecontent.read(bytes)) != -1){
+               ou.write(bytes, 0, read);
+           }
+           
+           writer.println("New file " + fileName + " created at " + path );
+        }
+        catch (FileNotFoundException fne) {
+        writer.println("You either did not specify a file to upload or are "
+                + "trying to upload a file to a protected or nonexistent "
+                + "location.");
+        writer.println("<br/> ERROR: " + fne.getMessage());
+
+        LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
+                new Object[]{fne.getMessage()});
+        }
+        finally {
+            if (ou != null) {
+                ou.close();
+            }
+            if (filecontent != null) {
+                filecontent.close();
+            }
+            if (writer != null) {
+                writer.close();
+            }
         }
     }
 
