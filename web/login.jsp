@@ -13,18 +13,20 @@
     </head>
     <body>
         <div>
-            <h1>Registre d'Imatges</h1>
-            <h2>Introdueix les dades per iniciar sessió</h2>
-            <form method="post" action="loginServlet" name="log">
-                Usuari:<br>
-                <input type="text" name="user">
+            <h1 id="headerRegistreImatge">Registre d'Imatges</h1>
+            <h2 id="headerDades">Introdueix les dades per iniciar sessió</h2>
+            <form method="post" action="loginServlet" id="log">
+                <label for="user">Usuari:</label>
                 <br>
-                Password: <br>
-                <input type="password" name="pass">
+                <input type="text" name="user" id="user">
                 <br>
-                <input type="submit" value="Entrar">
+                <label for="pass">Password:</label>
+                <br>
+                <input type="password" name="pass" id="pass">
+                <br>
+                <input type="submit" value="Entrar" id="entrar">
                 <br><br>
-                <a href="register.jsp">Encara no t'has registrat?</a>
+                <a href="registre.jsp" id="registrar">Encara no t'has registrat?</a>
             </form>
         </div>
     </body>
