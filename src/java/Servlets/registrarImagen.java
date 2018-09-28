@@ -19,8 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -47,12 +52,30 @@ public class registrarImagen extends HttpServlet {
         /* Creem les variables per poder guardar la imatge*/
         final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
         final Part filePart = request.getPart("file");
-        final String fileName = request.getParameter("titol");
+        
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(loginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         OutputStream ou = null;
         InputStream filecontent = null;
         final PrintWriter writer = response.getWriter();
         
+        Connection conn = null;
+        
+        String titol = request.getParameter("titol");
+        String descripcio = request.getParameter("textArea");
+        String clau = request.getParameter("clau");
+        String autor = request.getParameter("autor");
+        String creacio = request.getParameter("creacio");
+        String id = titol.concat(creacio);
+        System.out.println(id);
+        LOGGER.log(Level.SEVERE, id);
+        HttpSession session = request.getSession();
+        String user = (String) session.getAttribute("user");
+        final String fileName = id + ".png";
         
         try{
            ou = new FileOutputStream(new File(path + File.separator + fileName));
@@ -63,8 +86,19 @@ public class registrarImagen extends HttpServlet {
            while((read = filecontent.read(bytes)) != -1){
                ou.write(bytes, 0, read);
            }
+          
            
-           writer.println("New file " + fileName + " created at " + path );
+          /* System.out.println("New file " + fileName + " created at " + path );*/
+           conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
+           PreparedStatement statement = conn.prepareStatement("insert into imagenes values (?, ?, ?, ?, ?, ? , ?);");
+           statement.setString(1, id);
+           statement.setString(2, user);
+           statement.setString(3, titol);
+           statement.setString(4, descripcio);
+           statement.setString(5, clau);
+           statement.setString(6, autor);
+           statement.setString(7, creacio);
+           statement.executeUpdate();
         }
         catch (FileNotFoundException fne) {
         writer.println("You either did not specify a file to upload or are "
@@ -74,7 +108,9 @@ public class registrarImagen extends HttpServlet {
 
         LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
                 new Object[]{fne.getMessage()});
-        }
+        } catch (SQLException ex) {
+             Logger.getLogger(registrarImagen.class.getName()).log(Level.SEVERE, null, ex);
+         }
         finally {
             if (ou != null) {
                 ou.close();

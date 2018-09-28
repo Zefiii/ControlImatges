@@ -52,7 +52,7 @@ public class initDB extends HttpServlet {
             statement.executeUpdate("drop table if exists usuarios");
             statement.executeUpdate("drop table if exists imagenes");
             statement.executeUpdate("create table usuarios (id_usuario string primary key, password string)");
-            statement.executeUpdate("create table imagenes (id_imagen integer primary key, id_usuario string, titulo string, descripcion string, palabras_clave string, autor string, creacion string)");
+            statement.executeUpdate("create table imagenes (id_imagen string primary key, id_usuario string, titulo string, descripcion string, palabras_clave string, autor string, creacion string)");
 
               // set timeout to 30 sec.
         }
