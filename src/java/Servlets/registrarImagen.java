@@ -50,7 +50,9 @@ public class registrarImagen extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         /* Creem les variables per poder guardar la imatge*/
-        final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
+        //final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
+        final String path = "//Users//Jordi//NetBeansProjects//ControlImatges//web//ImatgesAD";
+
         final Part filePart = request.getPart("file");
         
         try {
@@ -70,7 +72,13 @@ public class registrarImagen extends HttpServlet {
         String clau = request.getParameter("clau");
         String autor = request.getParameter("autor");
         String creacio = request.getParameter("creacio");
-        String id = titol.concat(creacio);
+        String[] data = creacio.split("-");
+        String any = data[0];
+        String mes = data[1];
+        String dia = data[2];
+
+        String id = titol + dia + mes + any;
+        
         System.out.println(id);
         LOGGER.log(Level.SEVERE, id);
         HttpSession session = request.getSession();
@@ -89,7 +97,9 @@ public class registrarImagen extends HttpServlet {
           
            
           /* System.out.println("New file " + fileName + " created at " + path );*/
-           conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
+           //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
+           conn = DriverManager.getConnection("jdbc:sqlite://Users//Jordi//Desktop//loquesea.db");
+            
            PreparedStatement statement = conn.prepareStatement("insert into imagenes values (?, ?, ?, ?, ?, ? , ?);");
            statement.setString(1, id);
            statement.setString(2, user);
@@ -99,6 +109,8 @@ public class registrarImagen extends HttpServlet {
            statement.setString(6, autor);
            statement.setString(7, creacio);
            statement.executeUpdate();
+           response.sendRedirect("menu.jsp");
+
         }
         catch (FileNotFoundException fne) {
         writer.println("You either did not specify a file to upload or are "

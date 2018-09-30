@@ -48,7 +48,9 @@ public class registreServlet extends HttpServlet {
         String pass2 = request.getParameter("pass2");
         Connection conn = null;
         try (PrintWriter out = response.getWriter()) {
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
+            //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
+           conn = DriverManager.getConnection("jdbc:sqlite://Users//Jordi//Desktop//loquesea.db");
+
             Statement statement = conn.createStatement();
             if (pass1.equals(pass2))statement.executeUpdate("insert into usuarios values('" + user + "' , '" + pass1 + "' )");
             else out.println("<h1> Les contrasenyes no coincideixen <h1>");

@@ -19,7 +19,7 @@
     </head>
     <body>
         <div>
-            <h1 id="headerMenu">Menu</h1>
+            <h1 id="headerMenu">Menú</h1>
             <br>
             <a href="registrarImagen.jsp" id="refToRegistre">Registrar Imatge</a>
             <br>

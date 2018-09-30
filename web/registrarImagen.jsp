@@ -37,7 +37,7 @@
                 <input type="text" name="autor" id="autor">
                 <br>
                 <label for="creacio"><br>Data de creació:<br></label>
-                <input type="text" name="creacio" id="creacio" placeholder="DD/MM/AAAA">
+                <input type="date" name="creacio" id="creacio">
                 <br>
                 <input type="submit" name="registrar" id="registrar" value="Registrar">
                 <input type="reset" name="netejar" id="netejarQuestionari" value="Esborrar dades">
