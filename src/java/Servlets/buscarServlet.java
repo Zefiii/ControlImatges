@@ -14,10 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,10 +23,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author oriol
+ * @author jrubiralta
  */
-@WebServlet(name = "loginServlet", urlPatterns = {"/loginServlet"})
-public class loginServlet extends HttpServlet {
+@WebServlet(name = "buscarServlet", urlPatterns = {"/buscarServlet"})
+public class buscarServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,41 +40,87 @@ public class loginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+            
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(loginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String user = request.getParameter("user");
-        String pass = request.getParameter("pass");
+        
+        final PrintWriter document = response.getWriter();
         Connection conn = null;
+        String buscar = request.getParameter("buscar");
+        
+        HttpSession session = request.getSession();
+        String user = (String) session.getAttribute("user");
+        
         try (PrintWriter out = response.getWriter()) {
+
             //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
             conn = DriverManager.getConnection("jdbc:sqlite://Users//Jordi//Desktop//loquesea.db");
-            PreparedStatement statement =  conn.prepareStatement("select * from usuarios where id_usuario = ?");
-            statement.setString(1, user);
+            PreparedStatement statement =  conn.prepareStatement("select * from imagenes where titulo = ? or id_usuario = ? or palabras_clave = ? or autor = ?");
+            statement.setString(1, buscar);
+            statement.setString(2, buscar);
+            statement.setString(3, buscar);
+            statement.setString(4, buscar); 
+            
+            String id_imatge;
+            String titol;
+            String descripcio;
+            String clau;
+            String autor;
+            String creacio;
+            String path;
+            String id_usuari;
+            
             ResultSet rs = statement.executeQuery();
-            while(rs.next()){
-                if(rs.getString("password").equals(pass)){
-                    //aixo en principi dona sessions, mes tard intento que
-                    //faci el control. Jo m'encarregare d'aixo de moment
-                    HttpSession session = request.getSession();
-                    session.setAttribute("user", rs.getString("id_usuario"));
-                    session.setMaxInactiveInterval(5*60);
-                    Cookie userName = new Cookie("user", rs.getString("id_usuario"));
-                    response.sendRedirect("menu.jsp" );
-                }  
-                else{
-                    //aixo hauria de donar un missatge de error pero no ho fa
-                    RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
-                    PrintWriter ou;
-                    ou = response.getWriter();
-                    ou.println("<font color = red> Usuario o contraseya incorrectes.</font>");
-                    rd.forward(request, response);
+            if (rs.next()) {
+                document.write("<h1>Resultats</h1>");
+                titol = rs.getString("titulo");
+                id_imatge = rs.getString("id_imagen");
+                descripcio = rs.getString("descripcion");
+                clau = rs.getString("palabras_clave");
+                autor = rs.getString("autor");
+                creacio = rs.getString("creacion");
+                path = "ImatgesAD/" + id_imatge + ".png";
+                id_usuari = rs.getString("id_usuario");
+
+                
+                document.write("<h2>" + titol +"</h2>");
+                document.write("<img src=\"" + path + "\">");
+                document.write("<p>Descripció: " + descripcio +"</p>");
+                document.write("<p>Autor: " + autor +"</p>");
+                document.write("<p>Data de creació: " + creacio +"</p>");
+                
+                if (user.equals(id_usuari)) {
+                    document.write("<a href=\"modificarImagen.jsp\">Modificar imatge</a>");
                 }
             }
-            /*Aqui li he de donar la cookie, s'afageix a la resposta i es crea 
-            mitjancant Cookie. */
+            else {
+                document.println("No s'ha trobat cap imatge amb aquests paràmetres");
+            }
+            while(rs.next()){
+                document.write("<h1>Resultats</h1>");
+                titol = rs.getString("titulo");
+                id_imatge = rs.getString("id_imagen");
+                descripcio = rs.getString("descripcion");
+                clau = rs.getString("palabras_clave");
+                autor = rs.getString("autor");
+                creacio = rs.getString("creacion");
+                path = "ImatgesAD/" + id_imatge + ".png";
+                id_usuari = rs.getString("id_usuario");
+
+                
+                document.write("<h2>" + titol +"</h2>");
+                document.write("<img src=\"" + path + "\">");
+                document.write("<p>Descripció: " + descripcio +"</p>");
+                document.write("<p>Autor: " + autor +"</p>");
+                document.write("<p>Data de creació: " + creacio +"</p>");
+                
+                if (user.equals(id_usuari)) {
+                    document.write("<a href=\"modificarImagen.jsp\">Modificar imatge</a>");
+                }
+            }
         }
         catch(SQLException e)
         {
@@ -94,6 +138,7 @@ public class loginServlet extends HttpServlet {
             System.err.println(e.getMessage());
           }
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

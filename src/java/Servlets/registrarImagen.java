@@ -96,7 +96,7 @@ public class registrarImagen extends HttpServlet {
            }
           
            
-          /* System.out.println("New file " + fileName + " created at " + path );*/
+           /* System.out.println("New file " + fileName + " created at " + path );*/
            //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
            conn = DriverManager.getConnection("jdbc:sqlite://Users//Jordi//Desktop//loquesea.db");
             
