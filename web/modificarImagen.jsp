@@ -20,6 +20,9 @@
     <body>
         <div>
             <h1 id="headerModificar">Modificar imatge</h1>
+            <form method="post" action="modificarServlet" id="modificar">
+                
+            </form>
         </div>
     </body>
 </html>

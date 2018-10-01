@@ -93,7 +93,8 @@ public class buscarServlet extends HttpServlet {
                 document.write("<p>Data de creació: " + creacio +"</p>");
                 
                 if (user.equals(id_usuari)) {
-                    document.write("<a href=\"modificarImagen.jsp\">Modificar imatge</a>");
+                    request.getSession().setAttribute("id_imatge", id_imatge);
+                    document.write("<a href=\"modificarServlet\">Modificar imatge</a>");
                 }
             }
             else {
@@ -118,6 +119,7 @@ public class buscarServlet extends HttpServlet {
                 document.write("<p>Data de creació: " + creacio +"</p>");
                 
                 if (user.equals(id_usuari)) {
+                    request.getSession().setAttribute("id_imatge", id_imatge);
                     document.write("<a href=\"modificarImagen.jsp\">Modificar imatge</a>");
                 }
             }
