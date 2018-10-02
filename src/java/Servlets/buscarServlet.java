@@ -96,7 +96,7 @@ public class buscarServlet extends HttpServlet {
                 if (user.equals(id_usuari)) {
                     request.getSession().setAttribute("id_imatge", id_imatge);
                     document.write("<a href=\"modificarImagen.jsp\">Modificar imatge<br></a>");
-                    document.write("<a href=\"eliminarServlet\">Eliminar imatge</a>");
+                    document.write("<a href=\"eliminarServlet\" style=\"color:red\">Eliminar imatge</a>");
                 }
             }
             else {
@@ -123,7 +123,7 @@ public class buscarServlet extends HttpServlet {
                 if (user.equals(id_usuari)) {
                     request.getSession().setAttribute("id_imatge", id_imatge);
                     document.write("<a href=\"modificarImagen.jsp\">Modificar imatge<br></a>");
-                    document.write("<a href=\"eliminarServlet\">Eliminar imatge</a>");
+                    document.write("<a href=\"eliminarServlet\" style=\"color:red\">Eliminar imatge</a>");
                 }
             }
         }
@@ -143,7 +143,6 @@ public class buscarServlet extends HttpServlet {
             System.err.println(e.getMessage());
           }
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

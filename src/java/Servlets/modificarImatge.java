@@ -1,17 +1,16 @@
-package Servlets;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package Servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -25,8 +24,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author jrubiralta
  */
-@WebServlet(urlPatterns = {"/modificarServlet"})
-public class modificarServlet extends HttpServlet {
+@WebServlet(name = "modificarImatge", urlPatterns = {"/modificarImatge"})
+public class modificarImatge extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,22 +39,52 @@ public class modificarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        /* Creem les variables per poder guardar la imatge*/
+        //final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
+        //final String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
+        final String path = "/Users/Jordi/NetBeansProjects/ControlImatges/web/ImatgesAD";
+                
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(registreServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(loginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        final PrintWriter writer = response.getWriter();
         
-        final PrintWriter document = response.getWriter();
         Connection conn = null;
+        
+        String titol = request.getParameter("titol_mod");
+        String descripcio = request.getParameter("descripcio_mod");
+        String clau = request.getParameter("clau_mod");
+        String autor = request.getParameter("autor_mod");
+        String id_imagen = (String) request.getSession().getAttribute("id_imatge");
+        
+        System.out.print(titol);
+        System.out.print(descripcio);
+        System.out.print(clau);
+        System.out.print(autor);
         
         HttpSession session = request.getSession();
         String user = (String) session.getAttribute("user");
-        try (PrintWriter out = response.getWriter()) {
-           //conn = DriverManager.getConnection("C:\\Users\\Oriol\\Desktop\\basedades.db");
+        
+        try{
+           
+           /* System.out.println("New file " + fileName + " created at " + path );*/
+           //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
            conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+            
+           PreparedStatement statement = conn.prepareStatement("update imagenes set titulo = ?, descripcion = ?, palabras_clave = ?, autor = ? where id_imagen = ?;");
+           statement.setString(1, titol);
+           statement.setString(2, descripcio);
+           statement.setString(3, clau);
+           statement.setString(4, autor);
+           statement.setString(5, id_imagen);
 
-           String prova = (String) request.getSession().getAttribute("id_imatge");
+           statement.executeUpdate();
+           response.sendRedirect("menu.jsp");
+
         }
         catch(SQLException e)
         {

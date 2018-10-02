@@ -36,7 +36,6 @@
             <p>
             <% 
 
-
             final PrintWriter document = response.getWriter();
             Connection conn = null;
 
@@ -80,14 +79,13 @@
                     if (user.equals(id_usuari)) {
                         request.getSession().setAttribute("id_imatge", id_imatge);
                         document.write("<a href=\"modificarImagen.jsp\">Modificar imatge<br></a>");
-                        document.write("<a href=\"eliminarServlet\">Eliminar imatge</a>");
+                        document.write("<a href=\"eliminarServlet\" style=\"color:red\">Eliminar imatge</a>");
                     }
                 }
                 else {
                     document.println("No s'ha trobat cap imatge amb aquests paràmetres");
                 }
                 while(rs.next()){
-                    document.write("<h1>Resultats</h1>");
                     titol = rs.getString("titulo");
                     id_imatge = rs.getString("id_imagen");
                     descripcio = rs.getString("descripcion");
@@ -107,7 +105,7 @@
                     if (user.equals(id_usuari)) {
                         request.getSession().setAttribute("id_imatge", id_imatge);
                         document.write("<a href=\"modificarImagen.jsp\">Modificar imatge<br></a>");
-                        document.write("<a href=\"eliminarServlet\">Eliminar imatge</a>");
+                        document.write("<a href=\"eliminarServlet\" style=\"color:red\">Eliminar imatge</a>");
                     }
                 }
             }

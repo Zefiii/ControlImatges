@@ -27,7 +27,7 @@
             <br>
             <a href="list.jsp" id="refToLlista">Llistar imatges</a>
             <br>
-            <a href="buscarImagen.jsp" id="refToBuscar">Buscar imatge</a>
+            <a href="buscarImatges.jsp" id="refToBuscar">Buscar imatge</a>
         </div>
     </body>
 </html>

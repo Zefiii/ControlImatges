@@ -5,12 +5,19 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.io.File"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.List"%>
 <%@ page import="java.sql.Connection"%>
 <%@ page import="java.sql.DriverManager"%>
 <%@ page import="java.sql.PreparedStatement"%>
 <%@ page import="java.sql.ResultSet"%>
 <%@ page import="java.sql.SQLException"%>
 <%@ page import="javax.servlet.ServletException"%>
+<%@ page import="javax.servlet.RequestDispatcher"%>
+<%@ page import="javax.servlet.annotation.WebServlet"%>
+<%@ page import="java.io.PrintWriter"%>
+
 <%
     if (session.getAttribute("user") == null){
         response.sendRedirect("login.jsp");
@@ -25,57 +32,77 @@
     </head>
     <body>
         <div>
-              <%
-                String name = (String) request.getSession().getAttribute("id_imatge");
+            <%
+                final PrintWriter document = response.getWriter();
                 Connection conn = null;
+                String id_modificar = (String) request.getSession().getAttribute("id_imatge");
+
+                String user = (String) session.getAttribute("user");
+
                 try{
-                Class.forName("org.sqlite.JDBC");
-                }
-                    catch (ClassNotFoundException ex) {
-                    System.err.println("Data Base error");
-                }
-                try{ 
-                    conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+                    //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+                    conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+
+                    System.out.print(id_modificar);
+                    PreparedStatement statement =  conn.prepareStatement("select * from imagenes where id_imagen = ?");
+                    statement.setString(1, id_modificar);
+                    
+                    String titol;
+                    String descripcio;
+                    String clau;
+                    String autor;
+                    String path;
+                    
+                    ResultSet rs = statement.executeQuery();
+
+                    if (rs.next()) {
+                        document.write("<h1>Modificar element</h1>");
+                        titol = rs.getString("titulo");
+                        descripcio = rs.getString("descripcion");
+                        clau = rs.getString("palabras_clave");
+                        autor = rs.getString("autor");
+                        path = "ImatgesAD/" + id_modificar + ".png";
+                        
+                        document.write("<br><img src=\"" + path + "\"><br><br>");
+                        
+                        document.write("<form method=\"post\" action=\"modificarImatge\" id=\"modificarImatge\" enctype=\"multipart/form-data\">");
+                        document.write("<label for=\"titol_mod\">Títol: </label>");
+                        document.write("<input type=\"text\" name=\"titol_mod\" id=\"titol_mod\" value=\"titol\"><br>");
+                                                
+                        document.write("<label for=\"descripcio_mod\">Descripció: </label><br>");
+                        document.write("<textarea cols='30' rows='10' name=\"descripcio_mod\" id=\"descripcio_mod\">" + descripcio + "</textarea><br>");
+                       
+                        
+                        document.write("<label for=\"autor_mod\">Autor: </label>");
+                        document.write("<input type=\"text\" name=\"autor_mod\" id=\"autor_mod\" value=\"" + autor + "\"><br>");
+
+                        document.write("<label for=\"clau_mod\">Paraules Clau: </label>");
+                        document.write("<input type=\"text\" name=\"clau_mod\" id=\"clau_mod\" value=\"" + clau + "\"><br>");
+                        
+                        request.getSession().setAttribute("id_imatge", id_modificar);
+                        
+                        document.write("<input type=\"submit\" id=\"modificar\" value=\"Modificar\">");
+                        document.write("</form>");
+                    }
                 }
                 catch(SQLException e)
                 {
+                  System.err.println(e.getMessage());
+                }   
+                finally{
+                   try
+                  {
+                    if(conn != null)
+                      conn.close();
+                  }
+                  catch(SQLException e)
+                  {
+                    // connection close failed.
                     System.err.println(e.getMessage());
-                }
-                PreparedStatement statement;
-                statement = conn.prepareStatement("select * from imagenes where id_imagen = ?");
-                statement.setString(1, name);
-                ResultSet rs= statement.executeQuery();
-                Boolean next = false;
-                if(rs.next()){
-                  next = true;
+                  }
                 }
             %>
-            <h1 id="headerModificar">Modificar imatge</h1>
-            <form method="post"  id="modificar">
-                <label for="file">Imatge:<br></label>
-                <% out.print("<input type =\"file\" name=\"file\" id=\"file\" value=\"" + rs.getString("titulo")+ "\" >"); %>
                 
-                <br>
-                <label for="titol"><br>Títol:<br></label>
-                <input type="text" name="titol" id="titol">
-                <br>
-                <textarea cols='30' rows='10' name="textArea" id="textArea" placeholder="Escriu una breu descripció..."></textarea>
-                <br>
-                <label for="clau"><br>Paraules clau:<br></label>
-                <input type="text" name="clau" id="clau">
-                <br>
-                <label for="autor"><br>Autor:<br></label>
-                <input type="text" name="autor" id="autor">
-                <br>
-                <label for="creacio"><br>Data de creació:<br></label>
-                <input type="date" name="creacio" id="creacio">
-                <br>
-                <input type="submit" name="registrar" id="registrar" value="Registrar">
-                <input type="reset" name="netejar" id="netejarQuestionari" value="Esborrar dades">
-            </form>
-            
-            
-       
         </div>
     </body>
 </html>
