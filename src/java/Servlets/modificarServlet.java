@@ -1,23 +1,21 @@
+package Servlets;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,10 +23,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author oriol
+ * @author jrubiralta
  */
-@WebServlet(name = "loginServlet", urlPatterns = {"/loginServlet"})
-public class loginServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/modificarServlet"})
+public class modificarServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,38 +43,19 @@ public class loginServlet extends HttpServlet {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(loginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(registreServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String user = request.getParameter("user");
-        String pass = request.getParameter("pass");
+        
+        final PrintWriter document = response.getWriter();
         Connection conn = null;
+        
+        HttpSession session = request.getSession();
+        String user = (String) session.getAttribute("user");
         try (PrintWriter out = response.getWriter()) {
             //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
-            PreparedStatement statement =  conn.prepareStatement("select * from usuarios where id_usuario = ?");
-            statement.setString(1, user);
-            ResultSet rs = statement.executeQuery();
-            while(rs.next()){
-                if(rs.getString("password").equals(pass)){
-                    //aixo en principi dona sessions, mes tard intento que
-                    //faci el control. Jo m'encarregare d'aixo de moment
-                    HttpSession session = request.getSession();
-                    session.setAttribute("user", rs.getString("id_usuario"));
-                    session.setMaxInactiveInterval(5*60);
-                    Cookie userName = new Cookie("user", rs.getString("id_usuario"));
-                    response.sendRedirect("menu.jsp" );
-                }  
-                else{
-                    //aixo hauria de donar un missatge de error pero no ho fa
-                    RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
-                    PrintWriter ou;
-                    ou = response.getWriter();
-                    ou.println("<font color = red> Usuario o contraseya incorrectes.</font>");
-                    rd.forward(request, response);
-                }
-            }
-            /*Aqui li he de donar la cookie, s'afageix a la resposta i es crea 
-            mitjancant Cookie. */
+           conn = DriverManager.getConnection("jdbc:sqlite://Users//Jordi//Desktop//loquesea.db");
+
+           String prova = (String) request.getSession().getAttribute("id_imatge");
         }
         catch(SQLException e)
         {
