@@ -57,7 +57,7 @@ public class buscarServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 
             //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
-            conn = DriverManager.getConnection("jdbc:sqlite://Users//Jordi//Desktop//loquesea.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
             PreparedStatement statement =  conn.prepareStatement("select * from imagenes where titulo = ? or id_usuario = ? or palabras_clave = ? or autor = ?");
             statement.setString(1, buscar);
             statement.setString(2, buscar);

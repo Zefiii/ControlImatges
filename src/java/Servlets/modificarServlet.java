@@ -53,7 +53,7 @@ public class modificarServlet extends HttpServlet {
         String user = (String) session.getAttribute("user");
         try (PrintWriter out = response.getWriter()) {
             //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
-           conn = DriverManager.getConnection("jdbc:sqlite://Users//Jordi//Desktop//loquesea.db");
+           conn = DriverManager.getConnection("C:\\Users\\Oriol\\Desktop\\basedades.db");
 
            String prova = (String) request.getSession().getAttribute("id_imatge");
         }

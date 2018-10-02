@@ -51,7 +51,7 @@ public class registrarImagen extends HttpServlet {
         
         /* Creem les variables per poder guardar la imatge*/
         //final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
-        final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
+        final String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
 
         final Part filePart = request.getPart("file");
         
@@ -98,7 +98,7 @@ public class registrarImagen extends HttpServlet {
            
            /* System.out.println("New file " + fileName + " created at " + path );*/
            //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
-           conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
+           conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
             
            PreparedStatement statement = conn.prepareStatement("insert into imagenes values (?, ?, ?, ?, ?, ? , ?);");
            statement.setString(1, id);
