@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -49,21 +50,31 @@ public class eliminarServlet extends HttpServlet {
         
         final PrintWriter document = response.getWriter();
         Connection conn = null;
-        String eliminar = (String) request.getSession().getAttribute("id_imatge");
+        String eliminar = request.getParameter("id_imatge");
+        
+         //final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
+        final String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
+        //final String path = "/Users/Jordi/NetBeansProjects/ControlImatges/web/ImatgesAD";
                 
         HttpSession session = request.getSession();
         String user = (String) session.getAttribute("user");
         
         try (PrintWriter out = response.getWriter()) {
 
-            //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
-            conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+            //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
             
             System.out.print(eliminar);
             PreparedStatement statement =  conn.prepareStatement("delete from imagenes where id_imagen = ?");
             statement.setString(1, eliminar);
-            ResultSet rs = statement.executeQuery();
-            
+            statement.executeUpdate();
+            String fich = path + eliminar + ".png";
+            System.out.print(fich);
+            File fichero = new File(fich);
+            if(fichero.delete()) {
+                System.out.print("Fitxer eliminat del sistema");
+            }
+            else System.out.print("No s'ha eliminat");
             System.out.print("S'ha esborrat correctament");
             response.sendRedirect("menu.jsp");
 

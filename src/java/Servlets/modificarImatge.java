@@ -42,8 +42,8 @@ public class modificarImatge extends HttpServlet {
         
         /* Creem les variables per poder guardar la imatge*/
         //final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
-        //final String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
-        final String path = "/Users/Jordi/NetBeansProjects/ControlImatges/web/ImatgesAD";
+        final String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
+        //final String path = "/Users/Jordi/NetBeansProjects/ControlImatges/web/ImatgesAD";
                 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -59,9 +59,9 @@ public class modificarImatge extends HttpServlet {
         String descripcio = request.getParameter("descripcio_mod");
         String clau = request.getParameter("clau_mod");
         String autor = request.getParameter("autor_mod");
-        String id_imagen = (String) request.getSession().getAttribute("id_imatge");
+        String id_imagen = request.getParameter("id_imatge");
         
-        System.out.print(titol);
+        System.out.print(id_imagen);
         System.out.print(descripcio);
         System.out.print(clau);
         System.out.print(autor);
@@ -72,8 +72,8 @@ public class modificarImatge extends HttpServlet {
         try{
            
            /* System.out.println("New file " + fileName + " created at " + path );*/
-           //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
-           conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+           conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+           //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
             
            PreparedStatement statement = conn.prepareStatement("update imagenes set titulo = ?, descripcion = ?, palabras_clave = ?, autor = ? where id_imagen = ?;");
            statement.setString(1, titol);

@@ -43,8 +43,8 @@
 
             try{
 
-                //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
-                conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+                conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+                //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
 
                 PreparedStatement statement =  conn.prepareStatement("select * from imagenes"); 
 
@@ -77,9 +77,15 @@
                     document.write("<p>Data de creació: " + creacio +"</p>");
 
                     if (user.equals(id_usuari)) {
-                        request.getSession().setAttribute("id_imatge", id_imatge);
-                        document.write("<a href=\"modificarImagen.jsp\">Modificar imatge<br></a>");
-                        document.write("<a href=\"eliminarServlet\" style=\"color:red\">Eliminar imatge</a>");
+                        document.write("<form action=\"modificarImagen.jsp\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Modificar\">"
+                                        + "</form>");
+                        
+                        document.write("<form action=\"eliminarServlet\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Eliminar\">"
+                                        + "</form>");
                     }
                 }
                 else {
@@ -103,9 +109,14 @@
                     document.write("<p>Data de creació: " + creacio +"</p>");
 
                     if (user.equals(id_usuari)) {
-                        request.getSession().setAttribute("id_imatge", id_imatge);
-                        document.write("<a href=\"modificarImagen.jsp\">Modificar imatge<br></a>");
-                        document.write("<a href=\"eliminarServlet\" style=\"color:red\">Eliminar imatge</a>");
+                        document.write("<form action=\"modificarImagen.jsp\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Modificar\">"
+                                        + "</form>");
+                        document.write("<form action=\"eliminarServlet\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Eliminar\">"
+                                        + "</form>");
                     }
                 }
             }

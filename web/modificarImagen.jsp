@@ -35,14 +35,14 @@
             <%
                 final PrintWriter document = response.getWriter();
                 Connection conn = null;
-                String id_modificar = (String) request.getSession().getAttribute("id_imatge");
-
+                String id_modificar = request.getParameter("id_imatge");
+                Class.forName("org.sqlite.JDBC");
                 String user = (String) session.getAttribute("user");
 
                 try{
-                    //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
-                    conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
-
+                    conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+                    //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+                    
                     System.out.print(id_modificar);
                     PreparedStatement statement =  conn.prepareStatement("select * from imagenes where id_imagen = ?");
                     statement.setString(1, id_modificar);
@@ -63,26 +63,27 @@
                         autor = rs.getString("autor");
                         path = "ImatgesAD/" + id_modificar + ".png";
                         
-                        document.write("<br><img src=\"" + path + "\"><br><br>");
+                        out.println("<br><img src=\"" + path + "\"><br><br>");
                         
-                        document.write("<form method=\"post\" action=\"modificarImatge\" id=\"modificarImatge\" enctype=\"multipart/form-data\">");
-                        document.write("<label for=\"titol_mod\">Títol: </label>");
-                        document.write("<input type=\"text\" name=\"titol_mod\" id=\"titol_mod\" value=\"titol\"><br>");
+                        out.println("<form method=\"post\" action=\"modificarImatge\" id=\"modificarImatge\">");
+                        out.println("<label for=\"titol_mod\">Títol: </label>");
+                        out.println("<input type=\"text\" name=\"titol_mod\" id=\"titol_mod\" value=\""+titol+ "\"><br>");
                                                 
-                        document.write("<label for=\"descripcio_mod\">Descripció: </label><br>");
-                        document.write("<textarea cols='30' rows='10' name=\"descripcio_mod\" id=\"descripcio_mod\">" + descripcio + "</textarea><br>");
+                        out.println("<label for=\"descripcio_mod\">Descripció: </label><br>");
+                        out.println("<textarea cols='30' rows='10' name=\"descripcio_mod\" id=\"descripcio_mod\">" + descripcio + "</textarea><br>");
                        
                         
-                        document.write("<label for=\"autor_mod\">Autor: </label>");
-                        document.write("<input type=\"text\" name=\"autor_mod\" id=\"autor_mod\" value=\"" + autor + "\"><br>");
+                        out.println("<label for=\"autor_mod\">Autor: </label>");
+                        out.println("<input type=\"text\" name=\"autor_mod\" id=\"autor_mod\" value=\"" + autor + "\"><br>");
 
-                        document.write("<label for=\"clau_mod\">Paraules Clau: </label>");
-                        document.write("<input type=\"text\" name=\"clau_mod\" id=\"clau_mod\" value=\"" + clau + "\"><br>");
+                        out.println("<label for=\"clau_mod\">Paraules Clau: </label>");
+                        out.println("<input type=\"text\" name=\"clau_mod\" id=\"clau_mod\" value=\"" + clau + "\"><br>"
+                                + "<input type=\"hidden\" value=\"" + id_modificar + "\" name=\"id_imatge\" id=\"id_imatge\">");
                         
-                        request.getSession().setAttribute("id_imatge", id_modificar);
                         
-                        document.write("<input type=\"submit\" id=\"modificar\" value=\"Modificar\">");
-                        document.write("</form>");
+                        
+                        out.println("<input type=\"submit\" id=\"modificar\" value=\"Modificar\">");
+                        out.println("</form>");
                     }
                 }
                 catch(SQLException e)

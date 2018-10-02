@@ -51,8 +51,8 @@ public class loginServlet extends HttpServlet {
         String pass = request.getParameter("pass");
         Connection conn = null;
         try (PrintWriter out = response.getWriter()) {
-            //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
-            conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+            //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
             
             
             PreparedStatement statement =  conn.prepareStatement("select * from usuarios where id_usuario = ?");

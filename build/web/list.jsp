@@ -17,6 +17,8 @@
 <%@ page import="javax.servlet.ServletException"%>
 <%@ page import="javax.servlet.RequestDispatcher"%>
 <%@ page import="javax.servlet.annotation.WebServlet"%>
+<%@ page import="java.io.PrintWriter"%>
+
 <%
     if (session.getAttribute("user") == null){
         response.sendRedirect("login.jsp");
@@ -31,84 +33,112 @@
     </head>
     <body>
         <div>
-            <h1 id="headerLlistar">Llista d'imatges</h1>
-        </div>
-       
-        <p>
-            <% String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
-            Connection conn = null;
-            String[] arr_res = null;
-            try{
-                Class.forName("org.sqlite.JDBC");
-            }
-            catch (ClassNotFoundException ex) {
-                System.err.println("Data Base error");
-            }
+            <p>
+            <% 
 
-            try{ 
+            final PrintWriter document = response.getWriter();
+            Connection conn = null;
+
+            String user = (String) session.getAttribute("user");
+
+            try{
+
                 conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+                //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+
+                PreparedStatement statement =  conn.prepareStatement("select * from imagenes"); 
+
+                String id_imatge;
+                String titol;
+                String descripcio;
+                String clau;
+                String autor;
+                String creacio;
+                String path;
+                String id_usuari;
+
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    document.write("<h1>Llista d'imatges</h1>");
+                    titol = rs.getString("titulo");
+                    id_imatge = rs.getString("id_imagen");
+                    descripcio = rs.getString("descripcion");
+                    clau = rs.getString("palabras_clave");
+                    autor = rs.getString("autor");
+                    creacio = rs.getString("creacion");
+                    path = "ImatgesAD/" + id_imatge + ".png";
+                    id_usuari = rs.getString("id_usuario");
+
+
+                    document.write("<h2>" + titol +"</h2>");
+                    document.write("<img src=\"" + path + "\">");
+                    document.write("<p>Descripció: " + descripcio +"</p>");
+                    document.write("<p>Autor: " + autor +"</p>");
+                    document.write("<p>Data de creació: " + creacio +"</p>");
+
+                    if (user.equals(id_usuari)) {
+                        document.write("<form action=\"modificarImagen.jsp\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Modificar\">"
+                                        + "</form>");
+                        
+                        document.write("<form action=\"eliminarServlet\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Eliminar\">"
+                                        + "</form>");
+                    }
+                }
+                else {
+                    document.println("No s'ha trobat cap imatge amb aquests paràmetres");
+                }
+                while(rs.next()){
+                    titol = rs.getString("titulo");
+                    id_imatge = rs.getString("id_imagen");
+                    descripcio = rs.getString("descripcion");
+                    clau = rs.getString("palabras_clave");
+                    autor = rs.getString("autor");
+                    creacio = rs.getString("creacion");
+                    path = "ImatgesAD/" + id_imatge + ".png";
+                    id_usuari = rs.getString("id_usuario");
+
+
+                    document.write("<h2>" + titol +"</h2>");
+                    document.write("<img src=\"" + path + "\">");
+                    document.write("<p>Descripció: " + descripcio +"</p>");
+                    document.write("<p>Autor: " + autor +"</p>");
+                    document.write("<p>Data de creació: " + creacio +"</p>");
+
+                    if (user.equals(id_usuari)) {
+                        document.write("<form action=\"modificarImagen.jsp\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Modificar\">"
+                                        + "</form>");
+                        document.write("<form action=\"eliminarServlet\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Eliminar\">"
+                                        + "</form>");
+                    }
+                }
             }
             catch(SQLException e)
             {
-                System.err.println(e.getMessage());
+              System.err.println(e.getMessage());
             }   
-
-            File f = new File( path );
-
-            if ( f.isDirectory( )) {
-
-                List<String> res   = new ArrayList<String>();
-                File[] arr_content = f.listFiles();
-
-                int size = arr_content.length;
-
-                for ( int i = 0; i < size; i ++ ) {
-
-                    if ( arr_content[ i ].isFile( ))
-                    res.add( arr_content[ i ].getName());
-                }
-
-
-                arr_res = res.toArray( new String[ 0 ] );
-
-            } else
-                System.err.println( "¡ Path NO válido !" );
-            if(arr_res != null){
-                for (int i = 0; i < arr_res.length; ++i){
-                    out.print("<p>");
-                    out.println("<img src=\"ImatgesAD\\" + arr_res[i] + "\">");
-                    PreparedStatement statement;
-                    try {
-                        statement = conn.prepareStatement("select * from imagenes where id_imagen = ?");
-                        String nom = arr_res[i].replace(".png", "");
-                        statement.setString(1, nom);
-                         ResultSet rs = statement.executeQuery();
-                         if(rs.next()){
-                             System.err.println("Tenim un resultat com a minim");
-                            out.println("<p>Titol: "+ rs.getString("titulo")+ "</p>");
-                            out.println("<p>Descripcion: " + rs.getString("descripcion") + "</p>");
-                            out.println("<p>Autor: " + rs.getString("autor") + "</p>");
-                        }
-                    } catch (SQLException ex) {
-                       System.err.println("Error amb la consulta");
-                    }
-
-                    out.print("<p>");
-                }
-            }
-            try
-            {
+            finally{
+               try
+              {
                 if(conn != null)
                   conn.close();
+              }
+              catch(SQLException e)
+              {
+                // connection close failed.
+                System.err.println(e.getMessage());
+              }
             }
-             catch(SQLException e)
-            {
-            // connection close failed.
-                 System.err.println(e.getMessage());
-            }
-        }
 
             %>
         </p>
+        </div>
     </body>
 </html>
