@@ -94,7 +94,7 @@ public class buscarServlet extends HttpServlet {
                 
                 if (user.equals(id_usuari)) {
                     request.getSession().setAttribute("id_imatge", id_imatge);
-                    document.write("<a href=\"modificarServlet\">Modificar imatge</a>");
+                    document.write("<a href=\"modificarImagen.jsp\">Modificar imatge</a>");
                 }
             }
             else {

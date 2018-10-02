@@ -96,6 +96,17 @@
                     out.print("<p>");
                 }
             }
+            try
+            {
+                if(conn != null)
+                  conn.close();
+            }
+             catch(SQLException e)
+            {
+            // connection close failed.
+                 System.err.println(e.getMessage());
+            }
+        }
 
             %>
         </p>
