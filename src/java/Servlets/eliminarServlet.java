@@ -25,8 +25,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author jrubiralta
  */
-@WebServlet(name = "buscarServlet", urlPatterns = {"/buscarServlet"})
-public class buscarServlet extends HttpServlet {
+@WebServlet(name = "eliminarServlet", urlPatterns = {"/eliminarServlet"})
+public class eliminarServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,8 +49,8 @@ public class buscarServlet extends HttpServlet {
         
         final PrintWriter document = response.getWriter();
         Connection conn = null;
-        String buscar = request.getParameter("buscar");
-        
+        String eliminar = (String) request.getSession().getAttribute("id_imatge");
+                
         HttpSession session = request.getSession();
         String user = (String) session.getAttribute("user");
         
@@ -59,75 +59,16 @@ public class buscarServlet extends HttpServlet {
             //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
             conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
             
-            PreparedStatement statement =  conn.prepareStatement("select * from imagenes where titulo = ? or id_usuario = ? or palabras_clave = ? or autor = ?");
-            statement.setString(1, buscar);
-            statement.setString(2, buscar);
-            statement.setString(3, buscar);
-            statement.setString(4, buscar); 
-            
-            String id_imatge;
-            String titol;
-            String descripcio;
-            String clau;
-            String autor;
-            String creacio;
-            String path;
-            String id_usuari;
-            
+            System.out.print(eliminar);
+            PreparedStatement statement =  conn.prepareStatement("delete from imagenes where id_imagen = ?");
+            statement.setString(1, eliminar);
             ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                document.write("<h1>Resultats</h1>");
-                titol = rs.getString("titulo");
-                id_imatge = rs.getString("id_imagen");
-                descripcio = rs.getString("descripcion");
-                clau = rs.getString("palabras_clave");
-                autor = rs.getString("autor");
-                creacio = rs.getString("creacion");
-                path = "ImatgesAD/" + id_imatge + ".png";
-                id_usuari = rs.getString("id_usuario");
+            
+            System.out.print("S'ha esborrat correctament");
+            response.sendRedirect("menu.jsp");
 
-                
-                document.write("<h2>" + titol +"</h2>");
-                document.write("<img src=\"" + path + "\">");
-                document.write("<p>Descripció: " + descripcio +"</p>");
-                document.write("<p>Autor: " + autor +"</p>");
-                document.write("<p>Data de creació: " + creacio +"</p>");
-                
-                if (user.equals(id_usuari)) {
-                    request.getSession().setAttribute("id_imatge", id_imatge);
-                    document.write("<a href=\"modificarImagen.jsp\">Modificar imatge<br></a>");
-                    document.write("<a href=\"eliminarServlet\">Eliminar imatge</a>");
-                }
-            }
-            else {
-                document.println("No s'ha trobat cap imatge amb aquests paràmetres");
-            }
-            while(rs.next()){
-                document.write("<h1>Resultats</h1>");
-                titol = rs.getString("titulo");
-                id_imatge = rs.getString("id_imagen");
-                descripcio = rs.getString("descripcion");
-                clau = rs.getString("palabras_clave");
-                autor = rs.getString("autor");
-                creacio = rs.getString("creacion");
-                path = "ImatgesAD/" + id_imatge + ".png";
-                id_usuari = rs.getString("id_usuario");
-
-                
-                document.write("<h2>" + titol +"</h2>");
-                document.write("<img src=\"" + path + "\">");
-                document.write("<p>Descripció: " + descripcio +"</p>");
-                document.write("<p>Autor: " + autor +"</p>");
-                document.write("<p>Data de creació: " + creacio +"</p>");
-                
-                if (user.equals(id_usuari)) {
-                    request.getSession().setAttribute("id_imatge", id_imatge);
-                    document.write("<a href=\"modificarImagen.jsp\">Modificar imatge<br></a>");
-                    document.write("<a href=\"eliminarServlet\">Eliminar imatge</a>");
-                }
-            }
         }
-        catch(SQLException e)
+                catch(SQLException e)
         {
           System.err.println(e.getMessage());
         }   
@@ -143,7 +84,6 @@ public class buscarServlet extends HttpServlet {
             System.err.println(e.getMessage());
           }
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
