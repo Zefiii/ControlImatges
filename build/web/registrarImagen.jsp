@@ -22,24 +22,25 @@
             <h1 id="headerRegistreImatge">Registrar imatge</h1>
             <p id="dades"><strong>Introdueix les dades que es demanen a continuació</strong></p>
             <form method="post" action="registrarImagen" id="registrarImatge" enctype="multipart/form-data">
-                <label for="file"> Imatge:</label>
+                <label for="file">Imatge:<br></label>
                 <input type="file" name="file" id="file" >
                 <br>
-                <label for="titol">Títol:</label>
+                <label for="titol"><br>Títol:<br></label>
                 <input type="text" name="titol" id="titol">
                 <br>
                 <textarea cols='30' rows='10' name="textArea" id="textArea" placeholder="Escriu una breu descripció..."></textarea>
                 <br>
-                <label for="clau">Paraules clau:</label>
+                <label for="clau"><br>Paraules clau:<br></label>
                 <input type="text" name="clau" id="clau">
                 <br>
-                <label for="autor">Autor:</label>
+                <label for="autor"><br>Autor:<br></label>
                 <input type="text" name="autor" id="autor">
                 <br>
-                <label for="creacio">Data de creació:</label>
-                <input type="text" name="creacio">
+                <label for="creacio"><br>Data de creació:<br></label>
+                <input type="date" name="creacio" id="creacio">
                 <br>
-                <input type="submit" id="submit">
+                <input type="submit" name="registrar" id="registrar" value="Registrar">
+                <input type="reset" name="netejar" id="netejarQuestionari" value="Esborrar dades">
             </form>
         </div>
     </body>

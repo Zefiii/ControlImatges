@@ -21,6 +21,9 @@
     <body>
         <div>
             <h1 id="headerBuscar">Buscar Imatge</h1>
+            <label for="buscar">Buscar:</label>
+            <input type="text" name="buscar" id="buscar" placeholder="Buscar...">
+            <input type="submit" value="Buscar" id="botoBuscar">
         </div>
     </body>
 </html>

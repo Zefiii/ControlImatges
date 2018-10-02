@@ -53,7 +53,7 @@ public class loginServlet extends HttpServlet {
         Connection conn = null;
         try (PrintWriter out = response.getWriter()) {
             //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
-            conn = DriverManager.getConnection("jdbc:sqlite://Users//Jordi//Desktop//loquesea.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
             PreparedStatement statement =  conn.prepareStatement("select * from usuarios where id_usuario = ?");
             statement.setString(1, user);
             ResultSet rs = statement.executeQuery();
