@@ -46,6 +46,14 @@ public class error extends HttpServlet {
                 out.println("<h1 fontcolor=\"red\">No s'ha eliminat correctament</h1>");
                 out.println("<a href=\"menu.jsp\"> Menu </a>");
             }
+            else if((request.getAttribute("error").equals("registError"))){
+                out.println("<h1 fontcolor=\"red\">Ja existeix un usuari amb aquest nom</h1>");
+                out.println("<a href=\"registre.jsp\"> Registre </a>");
+            }
+            else if((request.getAttribute("error").equals("passError"))){
+                out.println("<h1 fontcolor=\"red\">Les contrasenyes no coincideixen</h1>");
+                out.println("<a href=\"registre.jsp\"> Registre </a>");
+            }
         }
     }
 

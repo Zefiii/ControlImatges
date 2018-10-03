@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -51,10 +53,21 @@ public class registreServlet extends HttpServlet {
             //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
             //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
             conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
-            Statement statement = conn.createStatement();
-            if (pass1.equals(pass2))statement.executeUpdate("insert into usuarios values('" + user + "' , '" + pass1 + "' )");
-            else out.println("<h1> Les contrasenyes no coincideixen <h1>");
-            response.sendRedirect("login.jsp");
+            PreparedStatement stateprova = conn.prepareStatement("select * from usuarios where id_usuario= ?");
+            stateprova.setString(1, user);
+            ResultSet rs = stateprova.executeQuery();
+            if(rs.next()){
+                request.setAttribute("error", "registError");
+                request.getRequestDispatcher("error").forward(request, response);
+            }
+            else{
+                Statement statement = conn.createStatement();
+                if (pass1.equals(pass2))statement.executeUpdate("insert into usuarios values('" + user + "' , '" + pass1 + "' )");
+                else{
+                        request.setAttribute("error", "passError");
+                        request.getRequestDispatcher("error").forward(request, response);
+                }
+            }
         }
         catch(SQLException e)
         {
