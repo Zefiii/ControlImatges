@@ -7,12 +7,6 @@ package Servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author oriol
  */
-@WebServlet(name = "initDB", urlPatterns = {"/initDB"})
-public class initDB extends HttpServlet {
+@WebServlet(name = "error", urlPatterns = {"/error"})
+public class error extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,40 +32,20 @@ public class initDB extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(registreServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Connection conn = null;
         try (PrintWriter out = response.getWriter()) {
-            //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
-            //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
-            Statement statement = conn.createStatement();
-            statement.setQueryTimeout(30);
-            statement.executeUpdate("drop table if exists usuarios");
-            statement.executeUpdate("drop table if exists imagenes");
-            statement.executeUpdate("create table usuarios (id_usuario string primary key, password string)");
-            statement.executeUpdate("create table imagenes (id_imagen string primary key, id_usuario string, titulo string, descripcion string, palabras_clave string, autor string, creacion string)");
-
-              // set timeout to 30 sec.
-        }
-         catch(SQLException e)
-        {
-          System.err.println(e.getMessage());
-        }   
-        finally{
-           try
-          {
-            if(conn != null)
-              conn.close();
-          }
-          catch(SQLException e)
-          {
-            // connection close failed.
-            System.err.println(e.getMessage());
-          }
+            /* TODO output your page here. You may use following sample code. */
+            if((request.getAttribute("error").equals("loginError"))){
+                out.println("<h1 fontcolor=\"red\">La contrasenya o l'usuari no estan bé</h1>");
+                out.println("<a href=\"login.jsp\"> Login </a>");
+            }
+            else if((request.getAttribute("error").equals("modifError"))){
+                out.println("<h1 fontcolor=\"red\">No s'ha modificat correctament</h1>");
+                out.println("<a href=\"menu.jsp\"> Menu </a>");
+            }
+            else if((request.getAttribute("error").equals("elimError"))){
+                out.println("<h1 fontcolor=\"red\">No s'ha eliminat correctament</h1>");
+                out.println("<a href=\"menu.jsp\"> Menu </a>");
+            }
         }
     }
 

@@ -40,9 +40,9 @@
                 String user = (String) session.getAttribute("user");
 
                 try{
-                    conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+                    //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
                     //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
-                    
+                    conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
                     System.out.print(id_modificar);
                     PreparedStatement statement =  conn.prepareStatement("select * from imagenes where id_imagen = ?");
                     statement.setString(1, id_modificar);

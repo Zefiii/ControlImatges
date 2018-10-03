@@ -52,8 +52,8 @@ public class eliminarServlet extends HttpServlet {
         Connection conn = null;
         String eliminar = request.getParameter("id_imatge");
         
-         //final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
-        final String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
+        final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD\\";
+        //final String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
         //final String path = "/Users/Jordi/NetBeansProjects/ControlImatges/web/ImatgesAD";
                 
         HttpSession session = request.getSession();
@@ -61,9 +61,9 @@ public class eliminarServlet extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) {
 
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+            //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
             //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
-            
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
             System.out.print(eliminar);
             PreparedStatement statement =  conn.prepareStatement("delete from imagenes where id_imagen = ?");
             statement.setString(1, eliminar);
@@ -74,7 +74,10 @@ public class eliminarServlet extends HttpServlet {
             if(fichero.delete()) {
                 System.out.print("Fitxer eliminat del sistema");
             }
-            else System.out.print("No s'ha eliminat");
+            else{
+                request.setAttribute("error", "elimError");
+                request.getRequestDispatcher("error").forward(request,response);
+            }
             System.out.print("S'ha esborrat correctament");
             response.sendRedirect("menu.jsp");
 

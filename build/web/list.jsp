@@ -43,9 +43,10 @@
 
             try{
 
-                conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
-                //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
-
+                //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+                //conn = DriverManager.getConnection("j\dbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+                conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
+                
                 PreparedStatement statement =  conn.prepareStatement("select * from imagenes"); 
 
                 String id_imatge;

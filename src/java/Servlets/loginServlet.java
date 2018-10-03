@@ -51,32 +51,27 @@ public class loginServlet extends HttpServlet {
         String pass = request.getParameter("pass");
         Connection conn = null;
         try (PrintWriter out = response.getWriter()) {
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+            //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
             //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
-            
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
             
             PreparedStatement statement =  conn.prepareStatement("select * from usuarios where id_usuario = ?");
             statement.setString(1, user);
             ResultSet rs = statement.executeQuery();
-            while(rs.next()){
-                if(rs.getString("password").equals(pass)){
-                    //aixo en principi dona sessions, mes tard intento que
-                    //faci el control. Jo m'encarregare d'aixo de moment
-                    HttpSession session = request.getSession();
-                    session.setAttribute("user", rs.getString("id_usuario"));
-                    session.setMaxInactiveInterval(5*60);
-                    Cookie userName = new Cookie("user", rs.getString("id_usuario"));
-                    response.sendRedirect("menu.jsp" );
-                }  
-                else{
-                    //aixo hauria de donar un missatge de error pero no ho fa
-                    RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
-                    PrintWriter ou;
-                    ou = response.getWriter();
-                    ou.println("<font color = red> Usuario o contraseya incorrectes.</font>");
-                    rd.forward(request, response);
-                }
+            if(rs.next() && rs.getString("password").equals(pass)){
+                //aixo en principi dona sessions, mes tard intento que
+                //faci el control. Jo m'encarregare d'aixo de moment
+                HttpSession session = request.getSession();
+                session.setAttribute("user", rs.getString("id_usuario"));
+                session.setMaxInactiveInterval(5*60);
+                Cookie userName = new Cookie("user", rs.getString("id_usuario"));
+                response.sendRedirect("menu.jsp" );
+            }  
+            else{
+                request.setAttribute("error", "loginError");
+                request.getRequestDispatcher("error").forward(request, response);
             }
+            
             /*Aqui li he de donar la cookie, s'afageix a la resposta i es crea 
             mitjancant Cookie. */
         }

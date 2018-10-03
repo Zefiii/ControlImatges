@@ -41,8 +41,8 @@ public class modificarImatge extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         /* Creem les variables per poder guardar la imatge*/
-        //final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
-        final String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
+        final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
+        //final String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
         //final String path = "/Users/Jordi/NetBeansProjects/ControlImatges/web/ImatgesAD";
                 
         try {
@@ -72,9 +72,9 @@ public class modificarImatge extends HttpServlet {
         try{
            
            /* System.out.println("New file " + fileName + " created at " + path );*/
-           conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+           //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
            //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
-            
+           conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db"); 
            PreparedStatement statement = conn.prepareStatement("update imagenes set titulo = ?, descripcion = ?, palabras_clave = ?, autor = ? where id_imagen = ?;");
            statement.setString(1, titol);
            statement.setString(2, descripcio);
@@ -88,7 +88,8 @@ public class modificarImatge extends HttpServlet {
         }
         catch(SQLException e)
         {
-          System.err.println(e.getMessage());
+          request.setAttribute("error", "modifError");
+          request.getRequestDispatcher("error").forward(request, response);
         }   
         finally{
            try
