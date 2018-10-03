@@ -40,7 +40,7 @@ public class buscarServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-            
+        
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
@@ -56,8 +56,9 @@ public class buscarServlet extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) {
 
-            //conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
-            conn = DriverManager.getConnection("jdbc:sqlite://Users//Jordi//Desktop//loquesea.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+            //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+            
             PreparedStatement statement =  conn.prepareStatement("select * from imagenes where titulo = ? or id_usuario = ? or palabras_clave = ? or autor = ?");
             statement.setString(1, buscar);
             statement.setString(2, buscar);
@@ -93,8 +94,14 @@ public class buscarServlet extends HttpServlet {
                 document.write("<p>Data de creació: " + creacio +"</p>");
                 
                 if (user.equals(id_usuari)) {
-                    request.getSession().setAttribute("id_imatge", id_imatge);
-                    document.write("<a href=\"modificarServlet\">Modificar imatge</a>");
+                    document.write("<form action=\"modificarImagen.jsp\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Modificar\">"
+                                        + "</form>");
+                    document.write("<form action=\"eliminarServlet\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Eliminar\">"
+                                        + "</form>");
                 }
             }
             else {
@@ -119,8 +126,14 @@ public class buscarServlet extends HttpServlet {
                 document.write("<p>Data de creació: " + creacio +"</p>");
                 
                 if (user.equals(id_usuari)) {
-                    request.getSession().setAttribute("id_imatge", id_imatge);
-                    document.write("<a href=\"modificarImagen.jsp\">Modificar imatge</a>");
+                   document.write("<form action=\"modificarImagen.jsp\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Modificar\">"
+                                        + "</form>");
+                    document.write("<form action=\"eliminarServlet\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Eliminar\">"
+                                        + "</form>");
                 }
             }
         }
@@ -140,7 +153,6 @@ public class buscarServlet extends HttpServlet {
             System.err.println(e.getMessage());
           }
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

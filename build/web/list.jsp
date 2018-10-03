@@ -4,20 +4,21 @@
     Author     : oriol
 --%>
 
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.io.File"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.sql.Connection"%>
-<%@ page import="import java.sql.DriverManager"%>
+<%@ page import="java.sql.DriverManager"%>
 <%@ page import="java.sql.PreparedStatement"%>
 <%@ page import="java.sql.ResultSet"%>
 <%@ page import="java.sql.SQLException"%>
-<%@ page import="java.util.logging.Level"%>
-<%@ page import="java.util.logging.Logger"%>
 <%@ page import="javax.servlet.ServletException"%>
 <%@ page import="javax.servlet.RequestDispatcher"%>
 <%@ page import="javax.servlet.annotation.WebServlet"%>
+<%@ page import="java.io.PrintWriter"%>
+
 <%
     if (session.getAttribute("user") == null){
         response.sendRedirect("login.jsp");
@@ -32,53 +33,112 @@
     </head>
     <body>
         <div>
-            <h1 id="headerLlistar">Llista d'imatges</h1>
-        </div>
-        <div>
             <p>
-                <% String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
-                 Connection conn = null;
-                 String[] arr_res = null;
-                try{
-                    Class.forName("org.sqlite.JDBC");
-                }
-                 
-                conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\oriol\\OneDrive\\Escritorio\\loquesea.db");
+            <% 
 
-                File f = new File( path );
+            final PrintWriter document = response.getWriter();
+            Connection conn = null;
 
-                if ( f.isDirectory( )) {
+            String user = (String) session.getAttribute("user");
 
-                    List<String> res   = new ArrayList();
-                    File[] arr_content = f.listFiles();
+            try{
 
-                    int size = arr_content.length;
+                conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
+                //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
 
-                    for ( int i = 0; i < size; i ++ ) {
+                PreparedStatement statement =  conn.prepareStatement("select * from imagenes"); 
 
-                        if ( arr_content[ i ].isFile( ))
-                        res.add( arr_content[ i ].getName());
+                String id_imatge;
+                String titol;
+                String descripcio;
+                String clau;
+                String autor;
+                String creacio;
+                String path;
+                String id_usuari;
+
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    document.write("<h1>Llista d'imatges</h1>");
+                    titol = rs.getString("titulo");
+                    id_imatge = rs.getString("id_imagen");
+                    descripcio = rs.getString("descripcion");
+                    clau = rs.getString("palabras_clave");
+                    autor = rs.getString("autor");
+                    creacio = rs.getString("creacion");
+                    path = "ImatgesAD/" + id_imatge + ".png";
+                    id_usuari = rs.getString("id_usuario");
+
+
+                    document.write("<h2>" + titol +"</h2>");
+                    document.write("<img src=\"" + path + "\">");
+                    document.write("<p>Descripció: " + descripcio +"</p>");
+                    document.write("<p>Autor: " + autor +"</p>");
+                    document.write("<p>Data de creació: " + creacio +"</p>");
+
+                    if (user.equals(id_usuari)) {
+                        document.write("<form action=\"modificarImagen.jsp\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Modificar\">"
+                                        + "</form>");
+                        
+                        document.write("<form action=\"eliminarServlet\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Eliminar\">"
+                                        + "</form>");
                     }
+                }
+                else {
+                    document.println("No s'ha trobat cap imatge amb aquests paràmetres");
+                }
+                while(rs.next()){
+                    titol = rs.getString("titulo");
+                    id_imatge = rs.getString("id_imagen");
+                    descripcio = rs.getString("descripcion");
+                    clau = rs.getString("palabras_clave");
+                    autor = rs.getString("autor");
+                    creacio = rs.getString("creacion");
+                    path = "ImatgesAD/" + id_imatge + ".png";
+                    id_usuari = rs.getString("id_usuario");
 
 
-                    arr_res = res.toArray( new String[ 0 ] );
+                    document.write("<h2>" + titol +"</h2>");
+                    document.write("<img src=\"" + path + "\">");
+                    document.write("<p>Descripció: " + descripcio +"</p>");
+                    document.write("<p>Autor: " + autor +"</p>");
+                    document.write("<p>Data de creació: " + creacio +"</p>");
 
-                } else
-                    System.err.println( "¡ Path NO válido !" );
-                if(arr_res != null){
-                    for (int i = 0; i < arr_res.length; ++i){
-                        PreparedStatement statement = conn.prepareStatement("select * from imagenes where id_imagen = ?");
-                        statement.setString(1, arr_res[i]);
-                        ResultSet rs = statement.executeQuery();
-                        if(rs.next()){
-                           // out.println("<h3>Titol: "+ rs.getString("titulo")+ "</h3>");
-                            out.println("<img src=\"ImatgesAD\\" + arr_res[i] + "\">");
-                           // out.println("<p>Descripcion: " + rs.getString("descripcion") + "</p>");
-                        }
+                    if (user.equals(id_usuari)) {
+                        document.write("<form action=\"modificarImagen.jsp\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Modificar\">"
+                                        + "</form>");
+                        document.write("<form action=\"eliminarServlet\" method=\"post\">"
+                                + "<input type=\"hidden\" value=\"" + id_imatge + "\" name=\"id_imatge\" id=\"id_imatge\">"
+                                + "<input type=\"submit\" value=\"Eliminar\">"
+                                        + "</form>");
                     }
                 }
-                %>
-            </p>
+            }
+            catch(SQLException e)
+            {
+              System.err.println(e.getMessage());
+            }   
+            finally{
+               try
+              {
+                if(conn != null)
+                  conn.close();
+              }
+              catch(SQLException e)
+              {
+                // connection close failed.
+                System.err.println(e.getMessage());
+              }
+            }
+
+            %>
+        </p>
         </div>
     </body>
 </html>

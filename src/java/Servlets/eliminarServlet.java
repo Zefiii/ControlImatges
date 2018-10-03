@@ -5,12 +5,14 @@
  */
 package Servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -18,13 +20,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author oriol
+ * @author jrubiralta
  */
-@WebServlet(name = "registreServlet", urlPatterns = {"/registreServlet"})
-public class registreServlet extends HttpServlet {
+@WebServlet(name = "eliminarServlet", urlPatterns = {"/eliminarServlet"})
+public class eliminarServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,25 +41,45 @@ public class registreServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(registreServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(loginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String user = request.getParameter("user");
-        String pass1 = request.getParameter("pass1");
-        String pass2 = request.getParameter("pass2");
+        
+        final PrintWriter document = response.getWriter();
         Connection conn = null;
+        String eliminar = request.getParameter("id_imatge");
+        
+         //final String path = "C:\\Users\\oriol\\OneDrive\\Documentos\\NetBeansProjects\\ControlImatges\\web\\ImatgesAD";
+        final String path = "C:\\Users\\Oriol\\Documents\\GitHub\\ControlImatges\\web\\ImatgesAD";
+        //final String path = "/Users/Jordi/NetBeansProjects/ControlImatges/web/ImatgesAD";
+                
+        HttpSession session = request.getSession();
+        String user = (String) session.getAttribute("user");
+        
         try (PrintWriter out = response.getWriter()) {
+
             conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Oriol\\Desktop\\basedades.db");
             //conn = DriverManager.getConnection("jdbc:sqlite:/Users/Jordi/Desktop/loquesea.db");
+            
+            System.out.print(eliminar);
+            PreparedStatement statement =  conn.prepareStatement("delete from imagenes where id_imagen = ?");
+            statement.setString(1, eliminar);
+            statement.executeUpdate();
+            String fich = path + eliminar + ".png";
+            System.out.print(fich);
+            File fichero = new File(fich);
+            if(fichero.delete()) {
+                System.out.print("Fitxer eliminat del sistema");
+            }
+            else System.out.print("No s'ha eliminat");
+            System.out.print("S'ha esborrat correctament");
+            response.sendRedirect("menu.jsp");
 
-            Statement statement = conn.createStatement();
-            if (pass1.equals(pass2))statement.executeUpdate("insert into usuarios values('" + user + "' , '" + pass1 + "' )");
-            else out.println("<h1> Les contrasenyes no coincideixen <h1>");
-            response.sendRedirect("login.jsp");
         }
-        catch(SQLException e)
+                catch(SQLException e)
         {
           System.err.println(e.getMessage());
         }   

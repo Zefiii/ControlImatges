@@ -21,9 +21,11 @@
     <body>
         <div>
             <h1 id="headerBuscar">Buscar Imatge</h1>
-            <label for="buscar">Buscar:</label>
-            <input type="text" name="buscar" id="buscar" placeholder="Buscar...">
-            <input type="submit" value="Buscar" id="botoBuscar">
+            <form method="post" action="buscarServlet" id="buscador">
+                <label for="buscar">Buscar:</label>
+                <input type="text" name="buscar" id="buscar">         
+                <input type="submit" value="Buscar" name="botoBuscar" id="botoBuscar">
+            </form>
         </div>
     </body>
 </html>
