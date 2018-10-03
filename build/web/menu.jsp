@@ -28,6 +28,8 @@
             <a href="list.jsp" id="refToLlista">Llistar imatges</a>
             <br>
             <a href="buscarImatges.jsp" id="refToBuscar">Buscar imatge</a>
+            <br>
+            <a href="logout">Logout</a>
         </div>
     </body>
 </html>
