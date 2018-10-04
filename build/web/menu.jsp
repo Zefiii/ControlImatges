@@ -23,8 +23,6 @@
             <br>
             <a href="registrarImagen.jsp" id="refToRegistre">Registrar Imatge</a>
             <br>
-            <a href="modificarImagen.jsp" id="refToModificar">Modificar Imatge</a>
-            <br>
             <a href="list.jsp" id="refToLlista">Llistar imatges</a>
             <br>
             <a href="buscarImatges.jsp" id="refToBuscar">Buscar imatge</a>
